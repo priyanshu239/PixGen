@@ -1,0 +1,85 @@
+# -------------------------------
+# Node & Environment Files
+# -------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# -------------------------------
+# Logs
+# -------------------------------
+logs
+*.log
+logs/**/*.log
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# -------------------------------
+# Build Artifacts
+# -------------------------------
+dist/
+build/
+.cache/
+coverage/
+.DS_Store
+
+# -------------------------------
+# IDE & Editor Files
+# -------------------------------
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.iml
+
+# -------------------------------
+# OS Files
+# -------------------------------
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# -------------------------------
+# React App (frontend)
+# -------------------------------
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/.cache/
+
+# -------------------------------
+# Backend
+# -------------------------------
+backend/node_modules/
+backend/.env
+backend/uploads/
+backend/tmp/
+backend/dist/
+
+# -------------------------------
+# Miscellaneous
+# -------------------------------
+*.local
+*.bak
+*.tmp
+*.log
+
+# -------------------------------
+# Optional: If you’re using VSCode dev containers or Docker
+# -------------------------------
+.devcontainer/
+docker-compose.override.yml
+Dockerfile
