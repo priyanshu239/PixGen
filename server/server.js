@@ -11,10 +11,16 @@ const app = express()
 
 app.use(express.json())
 app.use(cors())
-await connectDB()
+
+// Connect to database
+connectDB().then(() => {
+    console.log('Database connected successfully')
+}).catch((error) => {
+    console.error('Database connection failed:', error)
+})
 
 app.use('/api/user', userRouter)
 app.use('/api/image', imageRouter)
 app.get('/', (req, res)=> res.send("API Working"))
 
-app.listen(PORT, ()=>console.log('server running on port'+PORT))
+app.listen(PORT, ()=>console.log('server running on port '+PORT))
