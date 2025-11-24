@@ -13,19 +13,60 @@ const BuyCredit = () => {
   const navigate = useNavigate()
 
   const initPay = async(order) =>{
+     // Ensure Razorpay script is loaded
+     const loadScript = (src) => {
+       return new Promise((resolve) => {
+         if (window.Razorpay) return resolve(true)
+         const script = document.createElement('script')
+         script.src = src
+         script.onload = () => resolve(true)
+         script.onerror = () => resolve(false)
+         document.body.appendChild(script)
+       })
+     }
+
+     const ok = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
+     if (!ok) {
+       toast.error('Razorpay SDK failed to load. Are you online?')
+       return
+     }
+
      const options = {
        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
        amount: order.amount,
        currency: order.currency,
-       name: 'Credits Payment',
-       description: 'Credits Payment',
+       name: 'Imagify Credits',
+       description: 'Credits Purchase',
        order_id: order.id,
-       reciept: order.reciept,
-       handler: async (response)=>{
-        console.log(response);
+       handler: async (response) => {
+         try {
+           // verify payment on server
+           const { data } = await axios.post(backendUrl + '/api/user/verify-razor', {
+             razorpay_order_id: response.razorpay_order_id,
+             razorpay_payment_id: response.razorpay_payment_id,
+             razorpay_signature: response.razorpay_signature
+           }, { headers: { token } })
+
+           if (data.success) {
+             toast.success('Payment successful! Credits added.')
+             loadCreditsData()
+             navigate('/result')
+           } else {
+             toast.error(data.message || 'Verification failed')
+           }
+         } catch (err) {
+           toast.error(err.message || 'Verification error')
+         }
+       },
+       prefill: {
+         name: user?.name || ''
+       },
+       theme: {
+         color: '#111827'
        }
      }
-     const rzp =  new window.Razorpay(options)
+
+     const rzp = new window.Razorpay(options)
      rzp.open()
   }
 
@@ -67,7 +108,7 @@ const BuyCredit = () => {
             <img width={40} src={assets.logo_icon} alt="" />
             <p className='mt-3 mb-1 font-semibold'>{item.id}</p>
             <p className='text-sm'>{item.desc}</p>
-            <p className='mt-6'><span className='text-3xl font-medium'>${item.price}</span>
+            <p className='mt-6'><span className='text-3xl font-medium'>₹{item.price}</span>
              / {item.credits} credits</p>
              <button onClick={()=>paymentRazorpay(item.id)} className='w-full bg-gray-800 text-white mt-8 text-sm 
              rounded-md py-2.5 min-w-52'>{user ? 'Purchase' : 'Get Started'}</button>

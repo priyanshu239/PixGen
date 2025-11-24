@@ -4,6 +4,7 @@ const transactionSchema = new mongoose.Schema({
     userId: {type: String, required:true},
     plan: {type: String, required:true},
     amount: {type: Number, required:true},
+    credits: {type: Number, default: 0},
     payments: {type: Boolean, default:false},
     date: {type: Number},
 })
