@@ -53,15 +53,27 @@ export const generateImage = async (req, res)=>{
 
     } catch (error) {
         console.log('Image generation error:', error.response?.status, error.response?.data, error.message)
-        
-        if (error.response?.status === 402) {
-            return res.json({success: false, message: 'API credits exhausted. Please check your Clipdrop API key or upgrade your plan.'})
+
+        const status = error.response?.status
+        const respData = error.response?.data
+        let apiMessage = null
+        if (respData) {
+          // Clipdrop may return { error: '...' } or { message: '...' }
+          apiMessage = respData.error || respData.message || (typeof respData === 'string' ? respData : JSON.stringify(respData))
         }
-        
-        if (error.response?.status === 401) {
-            return res.json({success: false, message: 'Invalid API key. Please check your Clipdrop API configuration.'})
+
+        if (status === 402) {
+            return res.status(402).json({success: false, message: 'API credits exhausted. Please check your Clipdrop API key or upgrade your plan.'})
         }
-        
-        res.json({success: false, message: error.response?.data?.message || error.message})
+
+        if (status === 401) {
+            return res.status(401).json({success: false, message: 'Invalid API key. Please check your Clipdrop API configuration.'})
+        }
+
+        if (status === 422) {
+            return res.status(422).json({success: false, message: apiMessage || 'Prompt rejected by content moderation (possibly NSFW). Please modify your prompt.'})
+        }
+
+        return res.status(status || 500).json({success: false, message: apiMessage || error.message})
     }
 }
