@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { assets } from '../assets/assets'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { AppContext } from '../context/AppContext'
 
 const Result = () => {

@@ -10,17 +10,23 @@ const PORT = process.env.PORT || 4000
 const app = express()
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    credentials: true
+}))
 
-// Connect to database
-connectDB().then(() => {
-    console.log('Database connected successfully')
-}).catch((error) => {
-    console.error('Database connection failed:', error)
-})
-
+// API routes
 app.use('/api/user', userRouter)
 app.use('/api/image', imageRouter)
 app.get('/', (req, res)=> res.send("API Working"))
 
-app.listen(PORT, ()=>console.log('server running on port '+PORT))
+// Connect to database and start server
+connectDB()
+    .then(() => {
+        console.log('Database connected successfully')
+        app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+    })
+    .catch((error) => {
+        console.error('Database connection failed:', error)
+        process.exit(1)
+    })

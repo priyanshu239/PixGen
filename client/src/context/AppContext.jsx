@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
@@ -15,7 +15,7 @@ const AppContextProvider = ({ children }) => {
 
     const navigate = useNavigate();
 
-    const loadCreditsData = async ()=>{
+    const loadCreditsData = useCallback(async () => {
         try {
             const {data} = await axios.get(backendUrl + '/api/user/credits', {headers : {token}})
 
@@ -28,7 +28,7 @@ const AppContextProvider = ({ children }) => {
             console.log(error)
             toast.error(error.message)
         }
-    }
+    }, [backendUrl, token])
     
     const generateImage = async (prompt) =>{
         try {
@@ -55,11 +55,11 @@ const AppContextProvider = ({ children }) => {
         setUser(null)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         if(token){
             loadCreditsData()
         }
-    },[token])
+    }, [token, loadCreditsData])
 
     const value = {
         user,setUser,showLogin, setShowLogin,

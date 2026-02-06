@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { assets, plans } from '../assets/assets'
 import { AppContext } from '../context/AppContext'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import axios from 'axios'
