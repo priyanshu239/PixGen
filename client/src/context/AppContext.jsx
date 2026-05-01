@@ -12,7 +12,7 @@ const AppContextProvider = ({ children }) => {
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light')
 
     const [credit, setCredit] = useState(0)
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://pix-gen-sooty.vercel.app'
 
     const navigate = useNavigate();
 
