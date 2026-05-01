@@ -25,8 +25,8 @@ const Header = () => {
      whileInView={{opacity:1, y:0}}
      viewport={{once:true}}
     >
-        <motion.div className='text-stone-500 inline-flex text-center gap-2
-         bg-white px-6 py-1 rounded-full border border-neutral-500'
+        <motion.div className='text-[var(--text-color)] opacity-70 inline-flex text-center gap-2
+         bg-[var(--card-bg)] px-6 py-1 rounded-full border border-neutral-500'
           initial={{opacity:0, y:-20}}
           animate={{opacity:1, y:0}}
           transition={{delay : 0.2 , duration:0.8}}
@@ -77,7 +77,7 @@ const Header = () => {
               initial={{opacity:0}}
               animate={{opacity:1}}
               transition={{delay:1.2, duration:0.8}}
-             className='mt-2 text-neutral-600'>Generated images from imagify</motion.p>
+             className='mt-2 text-[var(--text-color)] opacity-60'>Generated images from imagify</motion.p>
     </motion.div>
   )
 }

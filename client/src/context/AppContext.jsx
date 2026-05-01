@@ -9,6 +9,7 @@ const AppContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [showLogin, setShowLogin] = useState(false);
     const [token, setToken] = useState(localStorage.getItem('token'))
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light')
 
     const [credit, setCredit] = useState(0)
     const backendUrl = import.meta.env.VITE_BACKEND_URL
@@ -55,6 +56,16 @@ const AppContextProvider = ({ children }) => {
         setUser(null)
     }
 
+    const toggleTheme = () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light'
+        setTheme(newTheme)
+        localStorage.setItem('theme', newTheme)
+    }
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme)
+    }, [theme])
+
     useEffect(() => {
         if(token){
             loadCreditsData()
@@ -65,7 +76,7 @@ const AppContextProvider = ({ children }) => {
         user,setUser,showLogin, setShowLogin,
         backendUrl,token,setToken,
         credit,setCredit, loadCreditsData, logout,
-        generateImage
+        generateImage, theme, toggleTheme
     };
     
     return (

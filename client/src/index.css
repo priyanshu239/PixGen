@@ -1,11 +1,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
 
-*{
-  font-family: Outfit;
+:root {
+  --bg-color: #f8fafc;
+  --bg-gradient: linear-gradient(to bottom, #f0fdfa, #fff7ed);
+  --text-color: #1e293b;
+  --card-bg: #ffffff;
+  --nav-bg: rgba(255, 255, 255, 0.8);
 }
 
-.placeholder-color{
+[data-theme='dark'] {
+  --bg-color: #0f172a;
+  --bg-gradient: linear-gradient(to bottom, #0f172a, #1e1b4b);
+  --text-color: #f1f5f9;
+  --card-bg: #1e293b;
+  --nav-bg: rgba(15, 23, 42, 0.8);
+}
+
+* {
+  font-family: Outfit;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.theme-bg {
+  background: var(--bg-gradient);
+}
+
+[data-theme='dark'] .theme-logo {
+  filter: invert(1) brightness(2);
+}
+
+.placeholder-color {
   color: #e0e0e0;
   font-weight: 300;
 }

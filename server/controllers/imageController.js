@@ -1,7 +1,7 @@
 import axios from "axios"
 import userModel from "../models/userModel.js"
 import FormData from 'form-data'
-
+import imageModel from '../models/imageModel.js'
 
 export const generateImage = async (req, res)=>{
     try {
@@ -49,6 +49,13 @@ export const generateImage = async (req, res)=>{
 
         await userModel.findByIdAndUpdate(user._id, { creditBalance: user.creditBalance - 1 })
 
+        const newImage = new imageModel({
+            userId: user._id,
+            prompt: prompt,
+            resultImage: resultImage
+        })
+        await newImage.save()
+
         res.json({success: true, message: 'Image Generated', creditBalance: user.creditBalance - 1, resultImage})
 
     } catch (error) {
@@ -75,5 +82,20 @@ export const generateImage = async (req, res)=>{
         }
 
         return res.status(status || 500).json({success: false, message: apiMessage || error.message})
+    }
+}
+
+export const getUserImages = async (req, res) => {
+    try {
+        const userId = req.userId || req.body.userId;
+        if (!userId) {
+            return res.json({ success: false, message: 'Not Authorised. Login Again' })
+        }
+        
+        const images = await imageModel.find({ userId }).sort({ createdAt: -1 });
+        res.json({ success: true, images });
+    } catch (error) {
+        console.log('Fetch images error:', error);
+        res.json({ success: false, message: error.message });
     }
 }
